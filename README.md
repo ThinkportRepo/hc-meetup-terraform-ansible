@@ -33,7 +33,7 @@ Next take a look at the [README][readme-terraform] to setup the proxmox provider
 
 _Version: 2.9.19_
 
-Ansible has an installation guide in his great documentation.
+Ansible has an installation guide in its great documentation.
 
 ## Setup with Vagrant
 
