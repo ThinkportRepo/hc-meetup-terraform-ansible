@@ -1,0 +1,8 @@
+# Install docker ce
+- name: "TP: install docker ce"
+  hosts: terraform
+  become: true
+  roles:
+    - role: geerlingguy.docker
+      docker_users:
+        - root

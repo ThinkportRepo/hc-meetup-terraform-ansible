@@ -1,0 +1,14 @@
+- src: gantsign.oh-my-zsh
+  version: 2.2.0
+
+- src: andrewrothstein.terraform
+  version: v2.2.60
+
+- src: andrewrothstein.kubectl
+  version: v1.1.57
+
+- src: geerlingguy.docker
+  version: 3.1.1
+
+- src: tobias_richter.proxmox
+  version: 2.0.0

@@ -1,0 +1,8 @@
+- name: "TP: prepare proxmox server"
+  hosts: proxmox
+  become: true
+  tasks:
+    - name: "TP: Copy vm template creation script"
+      copy: src=./files/proxmox/setup-image.sh dest=/tmp/setup-template.sh mode=0777
+    - name: "TP: Create cloud init ubuntu template"
+      command: sh /tmp/setup-template.sh

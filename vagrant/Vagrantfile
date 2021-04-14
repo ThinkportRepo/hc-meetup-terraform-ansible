@@ -1,0 +1,54 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+DEFAULT_CPUS = 2
+DEFAULT_MEMORY = 3072
+DEFAULT_CPUEXECUTIONCAP = 90
+HOSTNAME = "controlhost"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/focal64"
+
+  config.vm.hostname = HOSTNAME
+  config.vm.define HOSTNAME
+
+  config.vm.network "private_network", ip: "172.28.1.2"
+  config.ssh.forward_agent = true
+
+  # on windows you need to set the mount options
+  config.vm.synced_folder "../ansible", "/home/vagrant/ansible" #, mount_options: ["dmode=775,fmode=664"]
+  config.vm.synced_folder "../terraform", "/home/vagrant/terraform" #, mount_options: ["dmode=775,fmode=664"]
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = HOSTNAME
+
+    vb.customize ["modifyvm", :id, "--cpuexecutioncap", "#{DEFAULT_CPUEXECUTIONCAP}", "--groups", "/hc-meetup"]
+    # set cpu and memory values
+    vb.cpus = DEFAULT_CPUS
+    vb.memory = DEFAULT_MEMORY
+  end
+
+  # provision as root
+  config.vm.provision "shell", path: "provision-as-root.sh", privileged: true
+  # provision as vagrant
+  config.vm.provision "shell", path: "provision-as-vagrant.sh", privileged: false
+
+  # provision using ansible
+  config.vm.provision "ansible_local" do |ansible|
+    # basic ansible configuration
+    ansible.provisioning_path = "/home/vagrant/ansible"
+    ansible.compatibility_mode = "2.0"
+    ansible.extra_vars = { ansible_python_interpreter:"/usr/bin/python3" }
+
+    # galaxy settings
+    ansible.galaxy_role_file = "requirements.yml"
+    ansible.galaxy_roles_path = "/home/vagrant/ansible/.roles"
+    ansible.galaxy_command = "ansible-galaxy install -r %{role_file} --roles-path=%{roles_path}"
+
+    # playbook settings
+    ansible.inventory_path = "inventory/control-host"
+    ansible.playbook = "playbook-setup-controlhost.yml"
+  end
+end

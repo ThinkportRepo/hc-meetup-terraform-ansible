@@ -1,0 +1,13 @@
+base_packages:
+  - nano
+  - iftop
+  - htop
+  - iotop
+  - curl
+  - net-tools
+  - dnsutils
+  - dbus
+  - rsync
+  - bmon
+  - haveged
+  - moreutils

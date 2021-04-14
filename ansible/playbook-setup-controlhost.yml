@@ -1,0 +1,44 @@
+- name: "TP: setup base roles"
+  hosts: controlhost
+  user: vagrant
+  become: true
+  roles:
+    - role: base
+      tags:
+        - base
+    - role: gantsign.oh-my-zsh
+      tags:
+        - zsh
+      users:
+        - username: vagrant
+          theme: candy
+          plugins:
+            - git
+            - terraform
+
+- name: "TP: install terraform"
+  hosts: controlhost
+  user: vagrant
+  become: true
+  roles: 
+    - { role: andrewrothstein.terraform, terraform_platform: linux_amd64}
+
+- name: "TP: set terraform data variable"
+  hosts: controlhost
+  user: vagrant
+  become: true
+  tasks:
+    - lineinfile: 
+        path: /home/vagrant/.zshrc
+        line: "export TF_DATA_DIR=~/.terraform-data"
+        regexp: "export TF_DATA_DIR=~/.terraform-data"
+        insertafter: 'EOF'
+        state: present
+
+
+- name: "TP: install kubectl"
+  hosts: controlhost
+  user: vagrant
+  become: true
+  roles:
+    - { role: andrewrothstein.kubectl }

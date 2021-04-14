@@ -1,0 +1,12 @@
+- name: "TP: setup k8s nodes"
+  hosts: vm-k8s-node*
+  become: true
+  tasks:
+    - name: "TP: Copy the join command to server location"
+      copy: src=./files/kube/join-command dest=/tmp/join-command.sh mode=0777
+
+    - name: "TP: Join the node to cluster"
+      command: sh /tmp/join-command.sh
+  handlers:
+    - name: "TP: docker status"
+      service: name=docker state=started

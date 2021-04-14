@@ -1,0 +1,5 @@
+- import_playbook: include-setup-base.yml
+- import_playbook: include-setup-docker.yml
+- import_playbook: include-setup-k8s-base.yml
+- import_playbook: include-setup-k8s-master.yml
+- import_playbook: include-setup-k8s-nodes.yml

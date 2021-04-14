@@ -1,0 +1,31 @@
+- name: "setup k8s master"
+  hosts: vm-k8s-master
+  become: true
+  tasks: 
+    - name: Initialize the Kubernetes cluster using kubeadm
+      command: kubeadm init --apiserver-advertise-address="{{ ansible_default_ipv4.address }}" --apiserver-cert-extra-sans="{{ ansible_default_ipv4.address }}"  --node-name vm-k8s-master --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=SystemVerification
+    
+    - name: Create kube config folder for user
+      file:
+        path: /root/.kube
+        state: directory
+
+    - name: Copy kube config file for user
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /root/.kube/config
+        remote_src: yes
+
+    - name: Install calico pod network
+      become: true
+      command: kubectl create -f https://docs.projectcalico.org/manifests/calico.yaml
+
+    - name: Generate join command
+      command: kubeadm token create --print-join-command
+      register: join_command
+
+    - name: Copy join command to local file
+      local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./files/kube/join-command"
+  handlers:
+    - name: docker status
+      service: name=docker state=started

@@ -1,0 +1,8 @@
+[terraform]
+vm-k8s-master ansible_host=192.168.178.204
+vm-k8s-node1 ansible_host=192.168.178.205
+vm-k8s-node2 ansible_host=192.168.178.206
+[container]
+lxc-web-server ansible_host=192.168.178.207
+[proxmoxhosts]
+proxmox ansible_host=192.168.178.7

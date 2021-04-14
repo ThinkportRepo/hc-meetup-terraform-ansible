@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: Philipp Tolstych
+  description: install some basic packages on ubuntu
+  company: Thinkport GmbH
+  license:
+    - MIT
+  min_ansible_version: 2.0
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+        - xenial
+  role_name: base
+
+dependencies: []

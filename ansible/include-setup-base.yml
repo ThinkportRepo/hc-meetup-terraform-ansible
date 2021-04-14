@@ -1,0 +1,18 @@
+- name: "TP: setup base"
+  hosts: terraform
+  become: true
+  tasks:
+    - name: "TP: run apt update"
+      command: "apt update"
+      become: true
+
+  roles:
+    - role: base
+      tags:
+        - base
+    - role: gantsign.oh-my-zsh
+      tags:
+        - zsh
+      users:
+        - username: root
+          theme: candy

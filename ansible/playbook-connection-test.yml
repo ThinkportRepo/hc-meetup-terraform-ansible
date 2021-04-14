@@ -1,0 +1,18 @@
+- name: "TP: first ping system to test connection"
+  hosts: terraform:container:proxmoxhosts
+  tasks:
+    - ping:
+        data: pong  
+
+- name: "TP: check connection to hosts"
+  hosts: terraform:container:proxmoxhosts
+  gather_subset: min
+  tasks:
+    - name: "TP: output ansible_fqdn"
+      register: result
+      until: result is not failed
+      retries: 5
+      debug:
+        msg:
+          - "{{ ansible_fqdn }}"
+          - "{{ ansible_default_ipv4.address }}"

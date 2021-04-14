@@ -1,0 +1,4 @@
+- name: "TP: Install base packages"
+  package:
+    state: present
+    name: "{{ base_packages }}"

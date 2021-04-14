@@ -1,0 +1,37 @@
+- name: "TP: setup k8s base packages and configs"
+  hosts: terraform
+  become: true
+  tasks:
+    - name: "TP: Add an apt signing key for Kubernetes"
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
+    - name: "TP: Adding apt repository for Kubernetes"
+      apt_repository:
+        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+        filename: kubernetes.list
+
+    - name: "TP: Install Kubernetes binaries"
+      apt: 
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+      vars:
+        packages:
+          - kubelet 
+          - kubeadm 
+          - kubectl
+
+    - name: "TP: Configure node ip"
+      lineinfile:
+        path: /etc/default/kubelet
+        line: KUBELET_EXTRA_ARGS=--node-ip={{ ansible_default_ipv4.address }}
+        create: yes
+
+    - name: "TP: Restart kubelet"
+      service:
+        name: kubelet
+        daemon_reload: yes
+        state: restarted
