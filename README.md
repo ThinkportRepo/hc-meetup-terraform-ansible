@@ -1,16 +1,16 @@
 # HashiCorp Meetup 2021-04-15
 This Meetup talk covers the configuration of terraform for proxmox and the usage of ansible to configure vms and containers created with terraform on an proxmox system. 
 
-# Prepare your Systemsetup
+# Prepare your system setup
 
-## Install Proxmox
+## Install Proxmox VE
 
 _Version: 6.3-6_
 
 Installation of proxmox is described in the proxmox online documentation and not covered in this repository and talk.
 Visit [first steps][link-proxmox-first-steps] üpage of the proxmox website to download the system and get a walkthrough of the installation.
 
-## Install Container Template
+## Install container template
 
 To launch a lxc container we need to setup a image template. Go to local storage > [CT Templates][link-select-template] and click templates to install one or more container templates.
 
